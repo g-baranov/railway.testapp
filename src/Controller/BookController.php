@@ -18,12 +18,9 @@ class BookController extends AbstractController
         $this->bookRepository = $bookRepository;
     }
 
-    #[Route('/book', name: 'app_book')]
+    #[Route('/books', name: 'app_books_list', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $book = new Book();
-        $this->bookRepository->save($book, true);
-
         $books = $this->bookRepository->findAll();
 
         return $this->json([
@@ -31,5 +28,14 @@ class BookController extends AbstractController
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/BookController.php',
         ]);
+    }
+
+    #[Route('/books', name: 'app_books_store', methods: ['POST'])]
+    public function store(): JsonResponse
+    {
+        $book = new Book();
+        $this->bookRepository->save($book, true);
+
+        return $this->json(['id' =>$book->getId()]);
     }
 }
